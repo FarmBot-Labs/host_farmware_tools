@@ -40,13 +40,14 @@ defmodule HostFarmwareTools.Router do
       nil -> send_resp(conn, 401, "Missing paramater: directory")
       {:ok, files} ->
         json = Jason.encode!(fw, pretty: true)
+        File.write!(Path.join(fw.directory, "manifest.json"), json)
 
         files = Enum.map(files, fn(filename) ->
           actual_file = Path.join(fw.directory, filename)
           data = File.read!(actual_file)
           {to_charlist(filename), data}
         end)
-        {:ok, {name, zip}} = :zip.create(to_charlist(fw.package) ++ '.zip', [{'manifest.json', json} | files], [:memory])
+        {:ok, {name, zip}} = :zip.create(to_charlist(fw.package) ++ '.zip', files, [:memory])
 
         conn
         |> put_resp_content_type("application/zip")
