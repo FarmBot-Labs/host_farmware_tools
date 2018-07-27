@@ -70,5 +70,12 @@ defmodule HostFarmwareTools.Router do
     end.()
     |> Map.put(:url, "#{conn.scheme}://#{get_req_header(conn, "host")}#{conn.request_path}?#{conn.query_string}")
     |> Map.put(:zip, "#{conn.scheme}://#{get_req_header(conn, "host")}/farmware_zip?#{conn.query_string}")
+    |> Map.put(:version, random_version())
+  end
+
+  defp random_version do
+    to_string(Version.parse!("0.0.1-#{Base.encode64(:crypto.strong_rand_bytes(6))}"))
+  rescue
+    _ -> random_version()
   end
 end
