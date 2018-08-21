@@ -5,7 +5,7 @@ defmodule HostFarmwareTools.MixProject do
     [
       app: :host_farmware_tools,
       version: "0.1.0",
-      elixir: "~> 1.7-rc",
+      elixir: "~> 1.6",
       start_permanent: Mix.env() == :prod,
       escript: [main_module: HostFarmwareTools.Cli],
       deps: deps()
